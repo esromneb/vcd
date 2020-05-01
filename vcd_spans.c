@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include "vcd_parser.h"
 #include <node_api.h>
+#include "vcd_types.h"
 
 #define ASSERT(val, expr) \
     if (expr != napi_ok) { \
@@ -113,6 +114,21 @@ int varNameSpan(vcd_parser_t* state, const unsigned char* p, const unsigned char
 
 int idSpan(vcd_parser_t* state, const unsigned char* p, const unsigned char* endp) {
   napi_env env = state->napi_env;
+
+  if( false ) {
+      printf("start with trigger %s:\n", state->trigger);
+      // printf("my ptr %d:\n", state->dbgvec);
+      for(char* pp = p; pp != endp; pp++) {
+        printf("%d,", *pp);
+      }
+      printf("\n");
+  }
+
+  if( true ) {
+    id_span_cb_t cb = (id_span_cb_t)state->idSpanCb;
+    cb(p, endp);
+  }
+
   if (stringEq((state->trigger), p, endp)) {
     napi_value undefined, eventName, eventPayload1, eventPayload2, return_val;
     ASSERT(undefined, napi_get_undefined(env, &undefined))

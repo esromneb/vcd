@@ -4,6 +4,15 @@
 #include "vcd_parser.h"
 #include <node_api.h>
 
+#include "vcd_types.h"
+
+#include <vector>
+#include <iostream>
+
+using std::cout;
+// using std::cin;
+using std::endl;
+
 #define DECLARE_NAPI_METHOD(name, func) { \
     napi_property_descriptor desc = { name, 0, func, 0, 0, 0, napi_default, 0 }; \
     if (napi_define_properties(env, exports, 1, &desc) != napi_ok) { \
@@ -104,6 +113,19 @@
 }
 
 
+std::vector<char> v;
+
+void idSpanCallback(const unsigned char* p, const unsigned char* endp) {
+  cout << "In callback\n";
+  v.push_back(p[0]);
+}
+
+void setupState(vcd_parser_s* const state) {
+  // state->dbgvec = (void*)4;
+  state->idSpanCb = (void*)&idSpanCallback;
+
+  // id_span_cb_t foo = idSpanCallback;
+}
 
 
 METHOD(init) {
@@ -129,6 +151,8 @@ METHOD(init) {
   state->reason = "NO REASON";
   state->napi_env = env;
   state->tmpStr = tmpStr;
+
+  setupState(state);
 
   napi_value status;
   ASSERT(status, napi_create_string_latin1(env, "declaration", NAPI_AUTO_LENGTH, &status))
