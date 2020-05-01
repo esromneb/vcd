@@ -9,6 +9,7 @@
     "prepare": "node bin/build.js"
   },
   "files": [
+    "*.cpp",
     "*.c",
     "*.h",
     "lib",

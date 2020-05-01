@@ -109,7 +109,7 @@
 METHOD(init) {
   napi_value res;
 
-  struct vcd_parser_s *state = malloc(sizeof *state);
+  struct vcd_parser_s *state = (vcd_parser_s *) malloc(sizeof *state);
 
   const int32_t error = vcd_parser_init(state);
   if (error) {
@@ -132,7 +132,8 @@ METHOD(init) {
 
   napi_value status;
   ASSERT(status, napi_create_string_latin1(env, "declaration", NAPI_AUTO_LENGTH, &status))
-  ASSERT(state->info, napi_set_named_property(env, state->info, "status", status))
+  napi_set_named_property(env, (napi_value__*)state->info, "status", status); // FIXME removed ASSERT()
+
   // ASSERT(status, napi_get_named_property(env, state->info, "wires", &state->wires))
 
   // napi_value hierObj;
@@ -184,7 +185,7 @@ METHOD(setTrigger) {
   ASSERT_ARGC(2)
   struct vcd_parser_s *state;
   ASSERT_EXTERNAL(args[0], state)
-  ASSERT_STRING(args[1], state->trigger)
+  ASSERT_STRING(args[1], (char*)state->trigger)
 
   napi_value res;
   ASSERT(res, napi_create_int32(env, state->error, &res))
