@@ -35,7 +35,7 @@ const generate = cb => {
   p.property('i32', 'stackPointer');
   p.property('ptr', 'id');
   p.property('ptr', 'napi_env');
-  p.property('ptr', 'idSpanCb');
+  p.property('ptr', 'cppCb');
 
   const scopeIdentifierSpan = p.span(p.code.span('scopeIdentifierSpan'));
   const varSizeSpan = p.span(p.code.span('varSizeSpan'));
