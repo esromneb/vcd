@@ -1,5 +1,7 @@
 #pragma once
 
+#include "stdint.h"
+
 #define ID_COMMAND     (0)
 #define ID_SCOPEID     (1)
 #define ID_VARSIZE     (2)

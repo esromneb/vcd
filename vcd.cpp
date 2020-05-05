@@ -6,6 +6,8 @@
 
 #include "vcd_types.h"
 
+#include "playback.hpp"
+
 #include <vector>
 #include <iostream>
 #include <tuple>
@@ -113,41 +115,15 @@ using std::endl;
     var = name; \
 }
 
-std::string strForId(uint8_t id) {
-  switch(id) {
-    case ID_COMMAND:
-       return "ID_COMMAND";
-      break;
-    case ID_SCOPEID:
-       return "ID_SCOPEID";
-      break;
-    case ID_VARSIZE:
-       return "ID_VARSIZE";
-      break;
-    case ID_VARID:
-       return "ID_VARID";
-      break;
-    case ID_VARNAME:
-       return "ID_VARNAME";
-      break;
-    case ID_IDSPAN:
-       return "ID_IDSPAN";
-      break;
-    case ID_VECTORSPAN:
-       return "ID_VECTORSPAN";
-      break;
-    case ID_TIMESPAN:
-       return "ID_TIMESPAN";
-      break;
-    default:
-       return "?";
-      break;
-  }
-}
+Playback *playback = 0;
 
 
 std::vector<char> v;
 std::vector<std::tuple<uint8_t,std::vector<char>>> vv;
+
+void classEntry(const uint8_t id, const unsigned char* const p, const unsigned char* const endp) {
+  playback->cppEntry(id, p, endp);
+}
 
 void cppEntry(const uint8_t id, const unsigned char* p, const unsigned char* endp) {
   // cout << "In callback\n";
@@ -190,29 +166,15 @@ void cppEntry(const uint8_t id, const unsigned char* p, const unsigned char* end
 }
 
 void setupState(vcd_parser_s* const state) {
-  // state->dbgvec = (void*)4;
-  state->cppCb = (void*)&cppEntry;
+  playback = new Playback();
 
-  // id_span_cb_t foo = idSpanCallback;
+  // state->cppCb = (void*)&cppEntry;
+  state->cppCb = (void*)&classEntry;
+
 }
 
 METHOD(debug0) {
-  cout << "In debug0()" << "\n";
-
-  size_t endout = vv.size();
-
-  for(size_t i = 0; i < endout; i++) {
-    auto [id,one] = vv[i];
-    cout << "\nStart " << strForId(id) << " " << i << "\n";
-    for(size_t j = 0; j < one.size(); j++) {
-      cout << one[j];
-    }
-    cout << "\n";
-    for(size_t j = 0; j < one.size(); j++) {
-      cout << (int)one[j] << " " ;
-    }
-    cout << "\n";
-  }
+  playback->debug0();
 
   napi_value res = 0;
   return res;
@@ -244,6 +206,7 @@ METHOD(init) {
   state->tmpStr = tmpStr;
 
   setupState(state);
+
 
   napi_value status;
   ASSERT(status, napi_create_string_latin1(env, "declaration", NAPI_AUTO_LENGTH, &status))
