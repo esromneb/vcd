@@ -79,7 +79,7 @@ static void enforceValue(const uint8_t id) {
   }
 }
 
-void Snapshot::streamIn(const uint8_t id, const unsigned char* const p, const unsigned char* const endp) {
+void Snapshot::streamIn(const uint8_t id, const vcd_parser_t* const state, const unsigned char* const p, const unsigned char* const endp) {
   switch(id) {
     case ID_COMMAND:
       break;
@@ -92,6 +92,7 @@ void Snapshot::streamIn(const uint8_t id, const unsigned char* const p, const un
     case ID_VARNAME:
       break;
     case ID_IDSPAN:
+      cout << "id " << " with " << (int)state->command << "\n";
       break;
     case ID_VECTORSPAN:
       break;
@@ -114,6 +115,7 @@ Playback::Playback() {
 
 void Playback::cppEntry(
   const uint8_t id,
+  const vcd_parser_t* const state,
   const unsigned char* const p,
   const unsigned char* const endp) {
     // cout << "In callback\n";
@@ -134,7 +136,7 @@ void Playback::cppEntry(
   lcl.assign(p,endp);
   dense.push_back(std::make_tuple(id,lcl));
 
-  snap.streamIn(id, p, endp);
+  snap.streamIn(id, state, p, endp);
 
 
 }

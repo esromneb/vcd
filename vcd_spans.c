@@ -53,9 +53,9 @@ int commandSpan(vcd_parser_t* state, const unsigned char* p, const unsigned char
   napi_env env = state->napi_env;
 
   id_span_cb_t cb = (id_span_cb_t)state->cppCb;
-  cb(ID_COMMAND, p, endp);
+  cb(ID_COMMAND, state, p, endp);
 
-  if( true ) {
+  if( false ) {
     static int maxTrig = 200;
     if( maxTrig > 0 ) {
 
@@ -96,7 +96,7 @@ int commandSpan(vcd_parser_t* state, const unsigned char* p, const unsigned char
 int scopeIdentifierSpan(vcd_parser_t* state, const unsigned char* p, const unsigned char* endp) {
 
   id_span_cb_t cb = (id_span_cb_t)state->cppCb;
-  cb(ID_SCOPEID, p, endp);
+  cb(ID_SCOPEID, state, p, endp);
 
   napi_env env = state->napi_env;
   // *(endp - 1) = 0; // FIXME NULL termination of ASCII string
@@ -114,7 +114,7 @@ int scopeIdentifierSpan(vcd_parser_t* state, const unsigned char* p, const unsig
 
 int varSizeSpan(vcd_parser_t* state, const unsigned char* p, const unsigned char* endp) {
   id_span_cb_t cb = (id_span_cb_t)state->cppCb;
-  cb(ID_VARSIZE, p, endp);
+  cb(ID_VARSIZE, state, p, endp);
 
   state->size = strtol((const char *)p, (char **)&endp, 10);
   return 0;
@@ -122,7 +122,7 @@ int varSizeSpan(vcd_parser_t* state, const unsigned char* p, const unsigned char
 
 int varIdSpan(vcd_parser_t* state, const unsigned char* p, const unsigned char* endp) {
   id_span_cb_t cb = (id_span_cb_t)state->cppCb;
-  cb(ID_VARID, p, endp);
+  cb(ID_VARID, state, p, endp);
 
   napi_env env = state->napi_env;
   napi_value varId;
@@ -133,7 +133,7 @@ int varIdSpan(vcd_parser_t* state, const unsigned char* p, const unsigned char* 
 
 int varNameSpan(vcd_parser_t* state, const unsigned char* p, const unsigned char* endp) {
   id_span_cb_t cb = (id_span_cb_t)state->cppCb;
-  cb(ID_VARNAME, p, endp);
+  cb(ID_VARNAME, state, p, endp);
 
   napi_env env = state->napi_env;
   // *(endp - 1) = 0; // FIXME NULL termination of ASCII string
@@ -148,7 +148,7 @@ int varNameSpan(vcd_parser_t* state, const unsigned char* p, const unsigned char
 
 int idSpan(vcd_parser_t* state, const unsigned char* p, const unsigned char* endp) {
   id_span_cb_t cb = (id_span_cb_t)state->cppCb;
-  cb(ID_IDSPAN, p, endp);
+  cb(ID_IDSPAN, state, p, endp);
 
   napi_env env = state->napi_env;
 
@@ -163,7 +163,7 @@ int idSpan(vcd_parser_t* state, const unsigned char* p, const unsigned char* end
 
   if (stringEq((state->trigger), p, endp)) {
 
-    if( true ) {
+    if( false ) {
       static int maxTrig = 2;
       if( maxTrig > 0 ) {
 
@@ -190,14 +190,14 @@ int idSpan(vcd_parser_t* state, const unsigned char* p, const unsigned char* end
 
 int vectorSpan(vcd_parser_t* state, const unsigned char* p, const unsigned char* endp) {
   id_span_cb_t cb = (id_span_cb_t)state->cppCb;
-  cb(ID_VECTORSPAN, p, endp);
+  cb(ID_VECTORSPAN, state, p, endp);
 
   return 0;
 }
 
 int timeSpan(vcd_parser_t* state, const unsigned char* p, const unsigned char* endp) {
   id_span_cb_t cb = (id_span_cb_t)state->cppCb;
-  cb(ID_TIMESPAN, p, endp);
+  cb(ID_TIMESPAN, state, p, endp);
 
   state->time = strtol((const char *)p, (char **)&endp, 10);
   return 0;

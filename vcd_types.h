@@ -2,6 +2,8 @@
 
 #include "stdint.h"
 
+#include "vcd_parser.h"
+
 #define ID_COMMAND     (0)
 #define ID_SCOPEID     (1)
 #define ID_VARSIZE     (2)
@@ -11,4 +13,4 @@
 #define ID_VECTORSPAN  (6)
 #define ID_TIMESPAN    (7)
 
-typedef void (*id_span_cb_t)(const uint8_t id, const unsigned char* p, const unsigned char* endp);
+typedef void (*id_span_cb_t)(const uint8_t id, const vcd_parser_t* const state, const unsigned char* p, const unsigned char* endp);

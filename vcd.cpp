@@ -121,48 +121,8 @@ Playback *playback = 0;
 std::vector<char> v;
 std::vector<std::tuple<uint8_t,std::vector<char>>> vv;
 
-void classEntry(const uint8_t id, const unsigned char* const p, const unsigned char* const endp) {
-  playback->cppEntry(id, p, endp);
-}
-
-void cppEntry(const uint8_t id, const unsigned char* p, const unsigned char* endp) {
-  // cout << "In callback\n";
-
-  switch(id) {
-    case ID_COMMAND:
-      // cout << "ID_COMMAND\n";
-      break;
-    case ID_SCOPEID:
-      // cout << "ID_SCOPEID\n";
-      break;
-    case ID_VARSIZE:
-      // cout << "ID_VARSIZE\n";
-      break;
-    case ID_VARID:
-      // cout << "ID_VARID\n";
-      break;
-    case ID_VARNAME:
-      // cout << "ID_VARNAME\n";
-      break;
-    case ID_IDSPAN:
-      // cout << "ID_IDSPAN\n";
-      break;
-    case ID_VECTORSPAN:
-      // cout << "ID_VECTORSPAN\n";
-      break;
-    case ID_TIMESPAN:
-      // cout << "ID_TIMESPAN\n";
-      break;
-    default:
-      // cout << "Illegal id argument";
-      exit(1);
-      break;
-  }
-
-  std::vector<char> lcl;
-  lcl.assign(p,endp);
-  vv.push_back(std::make_tuple(id,lcl));
-  // v.push_back(p[0]);
+void classEntry(const uint8_t id, const vcd_parser_t* const state, const unsigned char* const p, const unsigned char* const endp) {
+  playback->cppEntry(id, state, p, endp);
 }
 
 void setupState(vcd_parser_s* const state) {
