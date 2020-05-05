@@ -56,9 +56,16 @@ fs.readdir(dir).then(files => {
 
       inst.change.on(_.TOP.clk,
         (time, cmd) => {
-          debugger;
+          // debugger;
           loads.onA(time, cmd);
           // stores.onNotA(time, cmd);
+        }
+      );
+
+      inst.change.on(_.TOP.timer_thing.latch_a,
+        (time, cmd) => {
+          debugger;
+          console.log(`time: ${time} latch_a ${cmd}`);
         }
       );
 

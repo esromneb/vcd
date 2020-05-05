@@ -45,21 +45,9 @@ static std::string strForId(const uint8_t id) {
   }
 }
 
-
-
-
-Playback::Playback() {
-  cout << "ctons()\n";
-}
-
-
-void Playback::cppEntry(
-  const uint8_t id,
-  const unsigned char* const p,
-  const unsigned char* const endp) {
-    // cout << "In callback\n";
-
-  switch(id) {
+// calls exit when a bad value is passed
+static void enforceValue(const uint8_t id) {
+    switch(id) {
     case ID_COMMAND:
       // cout << "ID_COMMAND\n";
       break;
@@ -89,31 +77,79 @@ void Playback::cppEntry(
       exit(1);
       break;
   }
+}
+
+void Snapshot::streamIn(const uint8_t id, const unsigned char* const p, const unsigned char* const endp) {
+  switch(id) {
+    case ID_COMMAND:
+      break;
+    case ID_SCOPEID:
+      break;
+    case ID_VARSIZE:
+      break;
+    case ID_VARID:
+      break;
+    case ID_VARNAME:
+      break;
+    case ID_IDSPAN:
+      break;
+    case ID_VECTORSPAN:
+      break;
+    case ID_TIMESPAN:
+      time = strtol((const char *)p, (char **)&endp, 10);
+      break;
+    default:
+      exit(1);
+      break;
+  }
+}
+
+
+
+
+Playback::Playback() {
+  cout << "ctons()\n";
+}
+
+
+void Playback::cppEntry(
+  const uint8_t id,
+  const unsigned char* const p,
+  const unsigned char* const endp) {
+    // cout << "In callback\n";
+
+  enforceValue(id);
+  
 
   if( id == ID_TIMESPAN ) {
     started = true;
   }
 
+  // for now, skip header section, will address this later
   if( !started ) {
     return;
   }
 
   std::vector<char> lcl;
   lcl.assign(p,endp);
-  vv.push_back(std::make_tuple(id,lcl));
+  dense.push_back(std::make_tuple(id,lcl));
+
+  snap.streamIn(id, p, endp);
+
+
 }
 
-void Playback::timespan(const uint64_t t) {
-  
-}
+// void Playback::timespan(const uint64_t t) {
+
+// }
 
 void Playback::debug0() {
   cout << "In debug0()" << "\n";
 
-  size_t endout = vv.size();
+  size_t endout = dense.size();
 
   for(size_t i = 0; i < endout; i++) {
-    auto [id,one] = vv[i];
+    auto [id,one] = dense[i];
     // cout << "\nStart " << strForId(id) << " " << i << "\n";
     cout << "\nStart " << strForId(id) << "\n";
     for(size_t j = 0; j < one.size(); j++) {

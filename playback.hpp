@@ -5,20 +5,31 @@
 #include <vector>
 #include <tuple>
 #include <cstdint>
+#include <string>
+#include <map>
 
+
+class Snapshot {
+public:
+  uint64_t time = 0;
+  std::map<std::string,std::string> map;
+  void streamIn(const uint8_t id, const unsigned char* const p, const unsigned char* const endp);
+};
 
 
 class Playback {
 public:
   
   bool started = false;
-  std::vector<std::tuple<uint8_t,std::vector<char>>> vv;
+  std::vector<std::tuple<uint8_t,std::vector<char>>> dense;
 
-  uint64_t now = -1; // now for the parser
+  // uint64_t time = -1; // now for the parser
+
+  Snapshot snap;
 
 
   Playback();
   void cppEntry(const uint8_t id, const unsigned char* const p, const unsigned char* const endp);
   void debug0();
-  void timespan(const uint64_t t);
+  // void timespan(const uint64_t t);
 };

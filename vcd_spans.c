@@ -55,6 +55,24 @@ int commandSpan(vcd_parser_t* state, const unsigned char* p, const unsigned char
   id_span_cb_t cb = (id_span_cb_t)state->cppCb;
   cb(ID_COMMAND, p, endp);
 
+  if( true ) {
+    static int maxTrig = 200;
+    if( maxTrig > 0 ) {
+
+      printf("command: (%d) ", state->command);
+      for(char* pp = p; pp != endp; pp++) {
+        printf("%c", *pp);
+      }
+      printf("\n");
+      // printf("my ptr %d:\n", state->dbgvec);
+      for(char* pp = p; pp != endp; pp++) {
+        printf("%d,", *pp);
+      }
+      printf("\n");
+      maxTrig--;
+    }
+  }
+
   if (state->command == 5) { // $upscope
     state->stackPointer -= 1;
     return 0;
@@ -144,6 +162,21 @@ int idSpan(vcd_parser_t* state, const unsigned char* p, const unsigned char* end
   }
 
   if (stringEq((state->trigger), p, endp)) {
+
+    if( true ) {
+      static int maxTrig = 2;
+      if( maxTrig > 0 ) {
+
+        printf("trigger (%d) %s:\n", state->command, state->trigger);
+        // printf("my ptr %d:\n", state->dbgvec);
+        for(char* pp = p; pp != endp; pp++) {
+          printf("%d,", *pp);
+        }
+        printf("\n");
+        maxTrig--;
+      }
+    }
+
     napi_value undefined, eventName, eventPayload1, eventPayload2, return_val;
     ASSERT(undefined, napi_get_undefined(env, &undefined))
     ASSERT(eventName, napi_create_string_latin1(env, (char*)p, (endp - p - 1), &eventName))
