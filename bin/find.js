@@ -11,10 +11,12 @@ const dir = './tmp/';
 fs.readdir(dir).then(files => {
   const tt0 = Date.now();
   async.eachLimit(files, 2, (fileName, callback) => {
+    console.log(`file: ${fileName}`);
     if (!fileName.match(/.vcd$/)) {
       callback();
       return;
     }
+
 
     const t0 = Date.now();
     const inst = lib.parser();
@@ -24,23 +26,37 @@ fs.readdir(dir).then(files => {
 
     inst.on('$enddefinitions', () => {
       const _ = inst.info.wires;
-      inst.change.on(_.top.TestDriver.testHarness.system.tile.vpu.mem_i_load,
+
+      // console.log(JSON.stringify(_));
+      console.log(_);
+      // debugger;
+
+      inst.change.on(_.TOP.clk,
         (time, cmd) => {
+          debugger;
           loads.onA(time, cmd);
-          stores.onNotA(time, cmd);
+          // stores.onNotA(time, cmd);
         }
       );
-      inst.change.on(_.top.TestDriver.testHarness.system.tile.vpu.mem_i_valid,
-        (time, cmd) => {
-          loads.onB(time, cmd);
-          stores.onB(time, cmd);
-          duration.on(time);
-        }
-      );
+
+      // inst.change.on(_.top.TestDriver.testHarness.system.tile.vpu.mem_i_load,
+      //   (time, cmd) => {
+      //     loads.onA(time, cmd);
+      //     stores.onNotA(time, cmd);
+      //   }
+      // );
+      // inst.change.on(_.top.TestDriver.testHarness.system.tile.vpu.mem_i_valid,
+      //   (time, cmd) => {
+      //     loads.onB(time, cmd);
+      //     stores.onB(time, cmd);
+      //     duration.on(time);
+      //   }
+      // );
     });
 
     inst.on('finish', () => {
       console.log(fileName, duration.time(), loads.time(), stores.time(), ((Date.now() - t0) / 1000 + 's'));
+      inst.debug0();
       callback();
     });
 

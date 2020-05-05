@@ -114,10 +114,15 @@ using std::endl;
 
 
 std::vector<char> v;
+std::vector<std::vector<char>> vv;
 
 void idSpanCallback(const unsigned char* p, const unsigned char* endp) {
-  cout << "In callback\n";
-  v.push_back(p[0]);
+  // cout << "In callback\n";
+
+  std::vector<char> lcl;
+  lcl.assign(p,endp);
+  vv.push_back(lcl);
+  // v.push_back(p[0]);
 }
 
 void setupState(vcd_parser_s* const state) {
@@ -125,6 +130,28 @@ void setupState(vcd_parser_s* const state) {
   state->idSpanCb = (void*)&idSpanCallback;
 
   // id_span_cb_t foo = idSpanCallback;
+}
+
+METHOD(debug0) {
+  cout << "In debug0()" << "\n";
+
+  size_t endout = vv.size();
+
+  for(size_t i = 0; i < endout; i++) {
+    auto one = vv[i];
+    cout << "Start " << i << "\n";
+    for(size_t j = 0; j < one.size(); j++) {
+      cout << one[j];
+    }
+    cout << "\n";
+    for(size_t j = 0; j < one.size(); j++) {
+      cout << (int)one[j] << " " ;
+    }
+    cout << "\n";
+  }
+
+  napi_value res = 0;
+  return res;
 }
 
 
@@ -181,6 +208,7 @@ METHOD(done) {
   ASSERT_OBJECT(args[3], info)
 
   // FIXME destroy parser state
+  // cout << "In Done()" << "\n";
 
   const int32_t error = 0;
   napi_value res;
@@ -221,6 +249,7 @@ napi_value Init(napi_env env, napi_value exports) {
   DECLARE_NAPI_METHOD("done", done)
   DECLARE_NAPI_METHOD("execute", execute)
   DECLARE_NAPI_METHOD("setTrigger", setTrigger)
+  DECLARE_NAPI_METHOD("debug0", debug0)
   return exports;
 }
 
