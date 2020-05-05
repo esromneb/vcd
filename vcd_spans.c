@@ -126,7 +126,7 @@ int idSpan(vcd_parser_t* state, const unsigned char* p, const unsigned char* end
 
   if( true ) {
     id_span_cb_t cb = (id_span_cb_t)state->idSpanCb;
-    cb(p, endp);
+    cb(ID_IDSPAN, p, endp);
   }
 
   if (stringEq((state->trigger), p, endp)) {

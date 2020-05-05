@@ -116,7 +116,7 @@ using std::endl;
 std::vector<char> v;
 std::vector<std::vector<char>> vv;
 
-void idSpanCallback(const unsigned char* p, const unsigned char* endp) {
+void idSpanCallback(const uint8_t id, const unsigned char* p, const unsigned char* endp) {
   // cout << "In callback\n";
 
   std::vector<char> lcl;
