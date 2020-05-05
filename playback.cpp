@@ -16,31 +16,45 @@ using std::endl;
 static std::string strForId(const uint8_t id) {
   switch(id) {
     case ID_COMMAND:
-       return "ID_COMMAND";
+      return "ID_COMMAND";
       break;
     case ID_SCOPEID:
-       return "ID_SCOPEID";
+      return "ID_SCOPEID";
       break;
     case ID_VARSIZE:
-       return "ID_VARSIZE";
+      return "ID_VARSIZE";
       break;
     case ID_VARID:
-       return "ID_VARID";
+      return "ID_VARID";
       break;
     case ID_VARNAME:
-       return "ID_VARNAME";
+      return "ID_VARNAME";
       break;
     case ID_IDSPAN:
-       return "ID_IDSPAN";
+      return "ID_IDSPAN";
       break;
     case ID_VECTORSPAN:
-       return "ID_VECTORSPAN";
+      return "ID_VECTORSPAN";
       break;
     case ID_TIMESPAN:
-       return "ID_TIMESPAN";
+      return "ID_TIMESPAN";
       break;
     default:
-       return "?";
+      return "?";
+      break;
+  }
+}
+
+static std::string strForCommand(const uint8_t command) {
+  switch(command) {
+    case 14:
+      return "0";
+      break;
+    case 15:
+      return "1";
+      break;
+    default:
+      return "?";
       break;
   }
 }
@@ -79,6 +93,11 @@ static void enforceValue(const uint8_t id) {
   }
 }
 
+void Snapshot::span(const vcd_parser_t* const state, const unsigned char* const p, const unsigned char* const endp) {
+
+  // cout << "id " << " with " << (int)state->command << "\n";
+}
+
 void Snapshot::streamIn(const uint8_t id, const vcd_parser_t* const state, const unsigned char* const p, const unsigned char* const endp) {
   switch(id) {
     case ID_COMMAND:
@@ -92,7 +111,7 @@ void Snapshot::streamIn(const uint8_t id, const vcd_parser_t* const state, const
     case ID_VARNAME:
       break;
     case ID_IDSPAN:
-      cout << "id " << " with " << (int)state->command << "\n";
+      span(state, p, endp);
       break;
     case ID_VECTORSPAN:
       break;
@@ -134,7 +153,7 @@ void Playback::cppEntry(
 
   std::vector<char> lcl;
   lcl.assign(p,endp);
-  dense.push_back(std::make_tuple(id,lcl));
+  dense.push_back(std::make_tuple(id,state->command,lcl));
 
   snap.streamIn(id, state, p, endp);
 
@@ -151,9 +170,9 @@ void Playback::debug0() {
   size_t endout = dense.size();
 
   for(size_t i = 0; i < endout; i++) {
-    auto [id,one] = dense[i];
+    auto [id,cmd,one] = dense[i];
     // cout << "\nStart " << strForId(id) << " " << i << "\n";
-    cout << "\nStart " << strForId(id) << "\n";
+    cout << "\nStart " << strForId(id) << " (" << strForCommand(cmd) << ")" << "\n";
     for(size_t j = 0; j < one.size(); j++) {
       cout << one[j];
     }
