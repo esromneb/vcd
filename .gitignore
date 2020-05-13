@@ -6,3 +6,7 @@ package-lock.json
 *.dot
 tmp
 vcd_parser.*
+
+
+# cpp stuff
+/test_types
