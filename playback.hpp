@@ -16,6 +16,7 @@ public:
   std::map<std::string,std::string> map;
   void streamIn(const uint8_t id, const vcd_parser_t* const state, const unsigned char* const p, const unsigned char* const endp);
   void span(const vcd_parser_t* const state, const unsigned char* const p, const unsigned char* const endp);
+  std::string asString(void);
 };
 
 
@@ -29,9 +30,12 @@ public:
 
   Snapshot snap;
 
+  std::vector<Snapshot> snaps;
+
 
   Playback();
   void cppEntry(const uint8_t id, const vcd_parser_t* const state, const unsigned char* const p, const unsigned char* const endp);
   void debug0();
+  void debug1();
   // void timespan(const uint64_t t);
 };

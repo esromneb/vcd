@@ -94,7 +94,13 @@ static void enforceValue(const uint8_t id) {
 }
 
 void Snapshot::span(const vcd_parser_t* const state, const unsigned char* const p, const unsigned char* const endp) {
+  std::vector<char> lcl;
+  lcl.assign(p,endp);
 
+  std::string lcls = std::string(lcl.begin(), lcl.end());
+
+  // map[state->cmd]
+  map[lcls] = state->command;
   // cout << "id " << " with " << (int)state->command << "\n";
 }
 
@@ -124,6 +130,26 @@ void Snapshot::streamIn(const uint8_t id, const vcd_parser_t* const state, const
   }
 }
 
+std::string Snapshot::asString(void) {
+  std::string out;
+
+  for(auto p : map ) {
+    auto [k,v] = p;
+
+    if( k[k.size()-1] == 10 ) {
+      std::string k2 = k.substr(0, k.size()-1);
+      out += k2;
+    } else {
+      out += k;
+    }
+
+    out += " -> ";
+    out += strForCommand(v[0]);
+    out += "\n";
+  }
+
+  return out;
+}
 
 
 
@@ -158,13 +184,51 @@ void Playback::cppEntry(
   snap.streamIn(id, state, p, endp);
 
 
+  switch(id) {
+    case ID_COMMAND:
+      break;
+    case ID_SCOPEID:
+      break;
+    case ID_VARSIZE:
+      break;
+    case ID_VARID:
+      break;
+    case ID_VARNAME:
+      break;
+    case ID_IDSPAN:
+      break;
+    case ID_VECTORSPAN:
+      break;
+    case ID_TIMESPAN:
+      snaps.push_back(snap);
+      break;
+    default:
+      break;
+  }
+
+
 }
 
 // void Playback::timespan(const uint64_t t) {
 
 // }
 
+void Playback::debug1() {
+  cout << "In debug1()" << "\n";
+
+  cout << "saved " << snaps.size() << " snapshots\n";
+
+  for(int i = 0; i < 10; i++) {
+    cout << "snap: " << i << "\n";
+
+    cout << snaps[i].asString();
+  }
+
+
+}
 void Playback::debug0() {
+  debug1(); return;
+
   cout << "In debug0()" << "\n";
 
   size_t endout = dense.size();

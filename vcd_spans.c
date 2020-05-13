@@ -153,7 +153,7 @@ int idSpan(vcd_parser_t* state, const unsigned char* p, const unsigned char* end
   napi_env env = state->napi_env;
 
   if( false ) {
-      printf("start with trigger %s:\n", state->trigger);
+      printf("start with trigger %s:\n", (char*)state->trigger);
       // printf("my ptr %d:\n", state->dbgvec);
       for(char* pp = p; pp != endp; pp++) {
         printf("%d,", *pp);
@@ -167,9 +167,9 @@ int idSpan(vcd_parser_t* state, const unsigned char* p, const unsigned char* end
       static int maxTrig = 2;
       if( maxTrig > 0 ) {
 
-        printf("trigger (%d) %s:\n", state->command, state->trigger);
+        printf("trigger (%d) %s:\n", state->command, (char*)state->trigger);
         // printf("my ptr %d:\n", state->dbgvec);
-        for(char* pp = p; pp != endp; pp++) {
+        for(const char* pp = p; pp != endp; pp++) {
           printf("%d,", *pp);
         }
         printf("\n");

@@ -28,9 +28,28 @@ int main(void) {
 
   // snap.map.put("a","z");
 
+  // for(auto p : snap.map ) {
+  //   auto [k,v] = p;
+  //   cout << k << " - " << v << "\n";
+  // }
+
+  Snapshot s2 = snap;
+
+
+  s2.map["foo"] = "bar";
+
+  for(auto p : s2.map ) {
+    auto [k,v] = p;
+    cout << k << " - " << v << "\n";
+  }
+
+  cout << "\n";
+
   for(auto p : snap.map ) {
     auto [k,v] = p;
     cout << k << " - " << v << "\n";
   }
+
+
 }
 
