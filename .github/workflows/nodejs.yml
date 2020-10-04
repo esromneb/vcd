@@ -21,6 +21,7 @@ jobs:
       with:
         version: 1.39.11
         actions-cache-folder: 'emsdk-cache-folder'
-    - name: Verify
+        no-cache: true
+    - name: Compile WASM
       run: make wasm
     - run: npm test
