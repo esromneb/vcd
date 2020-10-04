@@ -57,7 +57,9 @@ endif
 
 out/vcd.wasm: $(WASM_MAIN) $(CPP_FILES) $(HPP_FILES) Makefile
 	mkdir -p out
-	emcc $(WASM_MAIN) $(CPP_FILES) -s WASM=1 -o out/vcd.html \
+	emcc $(WASM_MAIN) $(CPP_FILES) -s WASM=1 -o out/vcd.js \
+	-s MODULARIZE=1 \
+	-s EXPORT_NAME=vcdwasm \
 	-s DISABLE_EXCEPTION_CATCHING=0 \
 	-s ALLOW_MEMORY_GROWTH=1 \
 	-s ALLOW_TABLE_GROWTH=1 \
