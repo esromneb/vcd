@@ -16,6 +16,7 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
     - run: make clean
-    - run: make wasm
     - run: npm i
+    - run: npm prepare
+    - run: make wasm
     - run: npm test
