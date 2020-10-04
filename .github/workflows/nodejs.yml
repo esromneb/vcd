@@ -24,4 +24,5 @@ jobs:
         no-cache: true
     - name: Compile WASM
       run: make wasm
+    - run: node --version
     - run: npm test
