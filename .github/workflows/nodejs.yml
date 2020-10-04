@@ -24,5 +24,9 @@ jobs:
         no-cache: true
     - name: Compile WASM
       run: make wasm
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v1
+      with:
+        node-version: ${{ matrix.node-version }}
     - run: node --version
     - run: npm test
