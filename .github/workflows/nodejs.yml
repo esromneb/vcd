@@ -1,13 +1,3 @@
-- name: Setup emsdk
-  uses: mymindstorm/setup-emsdk@v7
-  with:
-    # Make sure to set a version number!
-    version: 1.38.40
-    # This is the name of the cache folder.
-    # The cache folder will be placed in the build directory,
-    #  so make sure it doesn't conflict with anything!
-    actions-cache-folder: 'emsdk-cache'
-
 name: Node
 on: [push]
 jobs:
@@ -19,6 +9,7 @@ jobs:
         node-version: [10, 12, 14]
         os: [ubuntu-latest] # failing on [windows-latest, macOS-latest]
     steps:
+    - uses: mymindstorm/setup-emsdk@v7
     - uses: actions/checkout@v1
     - name: Use Node.js ${{ matrix.node-version }}
       uses: actions/setup-node@v1
