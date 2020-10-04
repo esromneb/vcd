@@ -1,0 +1,1 @@
+Module['getCalledMain'] = ()=>{return calledMain};
