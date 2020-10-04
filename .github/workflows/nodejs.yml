@@ -14,7 +14,8 @@ jobs:
       with:
         version: 1.39.11
         actions-cache-folder: 'emsdk-cache-folder'
-        no-cache: true
+    - name: Verify
+      run: emcc -v
     - uses: actions/checkout@v1
     - name: Use Node.js ${{ matrix.node-version }}
       uses: actions/setup-node@v1
