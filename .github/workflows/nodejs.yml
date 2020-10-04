@@ -11,14 +11,16 @@ jobs:
     steps:
     - uses: actions/checkout@v1
     - name: Use Node.js ${{ matrix.node-version }}
-    - uses: actions/setup-node@v1
+      uses: actions/setup-node@v1
       with:
         node-version: ${{ matrix.node-version }}
-    - uses: mymindstorm/setup-emsdk@v7
+    - run: make clean
+    - run: npm i
+    - name: Setup emsdk (use cache if found, create otherwise)  
+      uses: mymindstorm/setup-emsdk@v7
       with:
         version: 1.39.11
         actions-cache-folder: 'emsdk-cache-folder'
-    - run: make clean
-    - run: npm i
-    - run: make wasm
+    - name: Verify
+      run: make wasm
     - run: npm test
